@@ -1,8 +1,8 @@
 # SlowBeat
 
-**This is in early development stage.**
+**This is in an early development stage.**
 
-Single purpose speed shifting plugin. Originally free alternative to Gross Beat 1/2 speed effect and HalfTime plugin.
+Single purpose speed shifting plugin. Originally free alternative to Gross Beat 1/2 speed effect and HalfTime plugin. Open source alternative to Cymatics DejaVu.
 
 ## Setup to use FST
 
@@ -10,23 +10,21 @@ FST (Free Studio Techology): https://git.iem.at/zmoelnig/FST
 
 ### Steps
 
-Download the **FST** repository.
+Download the FST repository.
 
-Make a folder directory, `fst\plugininterfaces\vst2.x`
+Make a folder directory, `fst\plugininterfaces\vst2.x`.
 
 Copy all header files from the `fst` folder in the FST repository, and paste them in the `vst2.x` folder.
 
-When opening **Projucer**, click on `File -> Global Paths`.
+Open the `.jucer` file with Projucer, then click on `File -> Global Paths`.
 
 Set the **VST (Legacy) SDK** directory to the `fst` folder that contains the `plugininterfaces\vst2.x` directory.
 
 ### Legality
 
-I am not a lawyer.
+The legality of using FST to release plugin builds is discussed in the linked repository's README.
 
-Legality of using **FST** is discussed in the FST repository readme.
-
-Details about compiling and distributing plugins that interact with **VST hosts** and alternatives (e.g. **LMMS VeSTige**) were discussed in various threads in JUCE forums.
+Details about compiling and distributing plugins that interact with VST hosts (e.g. LMMS VeSTige) were discussed in various JUCE forum threads below.
 
 https://forum.juce.com/t/using-bona-fida-reversed-engineered-headers-to-distribute-vst2-like-plugins/32795
 
