@@ -8,7 +8,7 @@ SlowBeatFilter::SlowBeatFilter() {
 void SlowBeatFilter::prepareToPlay() {
 }
 
-void SlowBeatFilter::prepareProcessBlock(int inputChannels, int outputChannels, int numSamples, SlowBeatParams params) {
+void SlowBeatFilter::prepareProcessBlock(int inputChannels, int outputChannels, int numSamples, SlowBeatParams &params) {
 	auto oldSampleRate = mSampleRate;
 	auto oldBpm = mBpm;
 

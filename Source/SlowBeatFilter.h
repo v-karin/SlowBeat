@@ -59,7 +59,7 @@ public:
 	
 	void prepareToPlay();
 
-	void prepareProcessBlock(int inputChannels, int outputChannels, int numSamples, SlowBeatParams params);
+	void prepareProcessBlock(int inputChannels, int outputChannels, int numSamples, SlowBeatParams &params);
 	void processChannel(int channel, float *channelData);
 	void finishProcessBlock();
 
