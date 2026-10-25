@@ -29,7 +29,7 @@ void SlowBeatFilter::prepareProcessBlock(int inputChannels, int outputChannels, 
 	if (oldSampleRate != mSampleRate || oldBpm != mBpm) {
 		mBeatLengthSamples = static_cast<int>(mSampleRate / mBpm * 60.0);
 
-		int newSampleSize = (mBeatLengthSamples + 1) << 5;
+		int newSampleSize = (mBeatLengthSamples + 1) * 32;
 		mInternalBuffer.setSize(outputChannels, newSampleSize, false, true, false);
 
 		mInterpolators.resize(outputChannels);
@@ -46,9 +46,8 @@ void SlowBeatFilter::prepareProcessBlock(int inputChannels, int outputChannels, 
 	mMix = params.mix;
 	mFade = params.fade;
 
-	auto loopLength = params.loopLength;
-	int split = (loopLength & 1) ? 2 : 3; // even = triplet
-	mLoopLength = loopLengthBars(static_cast<int>(loopLength >> 1), split);
+	int split = (params.loopLength & 1) ? 2 : 3; // even = triplet
+	mLoopLength = loopLengthBars(static_cast<int>(params.loopLength >> 1), split);
 
 	int fadeSamples = static_cast<int>(mFade * mBeatLengthSamples);
 	mStartLength = sampleBorderLength(static_cast<int>(params.startLength), fadeSamples, mBeatLengthSamples / 4);
