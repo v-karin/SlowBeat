@@ -72,6 +72,8 @@ private:
 	juce::AudioSampleBuffer mInternalBuffer;
 	std::vector<juce::Interpolators::CatmullRom> mInterpolators;
 
+	int mOutputChannels = 0;
+
 	bool preparingToPlay = false;
 
 	int mNumSamples = 0;
