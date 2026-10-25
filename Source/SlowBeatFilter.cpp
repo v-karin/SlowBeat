@@ -37,8 +37,8 @@ void SlowBeatFilter::prepareProcessBlock(int inputChannels, int outputChannels, 
 			interpolator.reset();
 		}
 
-		mHead = 0;
-		mHead2 = 0;
+		mInputHead = 0;
+		mOutputHead = 0;
 	}
 
 	mNumSamples = numSamples;
@@ -62,36 +62,36 @@ void SlowBeatFilter::prepareProcessBlock(int inputChannels, int outputChannels, 
 
 		mPpqPosition = static_cast<float>(params.ppqPosition);
 
-		if (prevModFull > fmod(mPpqPosition, 32.0f) || mHead > mInternalBuffer.getNumSamples() || !params.isPlaying || mPpqPosition <= std::numeric_limits<float>::epsilon()) {
-			mHead = 0;
+		if (prevModFull > fmod(mPpqPosition, 32.0f) || mInputHead > mInternalBuffer.getNumSamples() || !params.isPlaying || mPpqPosition <= std::numeric_limits<float>::epsilon()) {
+			mInputHead = 0;
 		}
 
-		if (prevModLoop > fmod(mPpqPosition, mLoopLength) || mHead2 > mHead) {
-			mHead2 = mHead;
+		if (prevModLoop > fmod(mPpqPosition, mLoopLength) || mOutputHead > mInputHead) {
+			mOutputHead = mInputHead;
 		}
 	}
 }
 
 void SlowBeatFilter::processChannel(int channel, float *channelData) {
 	if (mOn) {
-		float *internalChannelData = mInternalBuffer.getWritePointer(channel, mHead);
+		float *internalChannelData = mInternalBuffer.getWritePointer(channel, mInputHead);
 		for (int i = 0; i < mNumSamples; ++i) {
 			internalChannelData[i] = channelData[i];
 		}
-		mProcessed = mInterpolators[channel].process(mSpeed, mInternalBuffer.getWritePointer(channel, mHead2), channelData, mNumSamples);
+		mProcessed = mInterpolators[channel].process(mSpeed, mInternalBuffer.getWritePointer(channel, mOutputHead), channelData, mNumSamples);
 	}
 }
 
 void SlowBeatFilter::finishProcessBlock() {
-	mHead += mNumSamples;
-	mHead2 += mProcessed;
+	mInputHead += mNumSamples;
+	mOutputHead += mProcessed;
 }
 
 void SlowBeatFilter::finishPlayback() {
 	mInternalBuffer.setSize(0, 0);
 
-	mHead = 0;
-	mHead2 = 0;
+	mInputHead = 0;
+	mOutputHead = 0;
 }
 
 const SlowBeatReturn &SlowBeatFilter::getVariables() {
@@ -106,8 +106,8 @@ const SlowBeatReturn &SlowBeatFilter::getVariables() {
 		.internalVolume = mInternalVolume,
 		.fade           = mFade,
 		.phase          = mPhase,
-		.head           = mHead,
-		.head2          = mHead2
+		.inputHead      = mInputHead,
+		.outputHead     = mOutputHead
 	};
 
 	return variables;

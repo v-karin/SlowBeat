@@ -141,6 +141,6 @@ void SlowBeatAudioProcessorEditor::timerCallback() {
 
     fadeLabel.setText("Fade: " + std::to_string(variables.fade), juce::NotificationType::dontSendNotification);
     phaseLabel.setText("Phase: " + std::to_string(variables.phase), juce::NotificationType::dontSendNotification);
-    headLabel.setText("Head: " + std::to_string(variables.head), juce::NotificationType::dontSendNotification);
-    head2Label.setText("Head: " + std::to_string(variables.head2), juce::NotificationType::dontSendNotification);
+    headLabel.setText("In Head: " + std::to_string(variables.inputHead), juce::NotificationType::dontSendNotification);
+    head2Label.setText("Out Head: " + std::to_string(variables.outputHead), juce::NotificationType::dontSendNotification);
 }

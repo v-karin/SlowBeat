@@ -40,8 +40,8 @@ struct SlowBeatReturn {
 	float fade;
 	float phase;
 
-	int head;
-	int head2;
+	int inputHead;
+	int outputHead;
 };
 
 
@@ -97,8 +97,8 @@ private:
 
 	bool mOn = false;
 
-	int mHead = 0;
-	int mHead2 = 0;
+	int mInputHead = 0;
+	int mOutputHead = 0;
 
 	int mBeatLengthSamples = 0;
 	int mProcessed = 0;
