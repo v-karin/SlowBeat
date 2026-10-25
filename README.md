@@ -12,7 +12,7 @@ FST (Free Studio Techology): https://git.iem.at/zmoelnig/FST
 
 Download the FST repository.
 
-Make a folder directory, `fst\plugininterfaces\vst2.x`.
+Make a folder directory, `fst\pluginterfaces\vst2.x`.
 
 Copy all header files from the `fst` folder in the FST repository, and paste them in the `vst2.x` folder.
 
