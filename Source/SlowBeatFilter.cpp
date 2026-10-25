@@ -2,6 +2,15 @@
 
 
 
+static float loopLengthBars(int exponent, int split) {
+	auto mult = 2.0f / static_cast<float>(split);
+	return static_cast<float>(2 << exponent) / 8.0f * mult;
+}
+
+static int sampleBorderLength(int exponent, int fadeSamples, int lengthMult) {
+	return exponent == 0 ? 0 : (exponent == 1 ? fadeSamples : (2 << exponent) * lengthMult);
+}
+
 SlowBeatFilter::SlowBeatFilter() {
 }
 
@@ -18,7 +27,7 @@ void SlowBeatFilter::prepareProcessBlock(int inputChannels, int outputChannels, 
 	}
 
 	if (oldSampleRate != mSampleRate || oldBpm != mBpm) {
-		mBeatLengthSamples = (int)(mSampleRate / mBpm * 60.0);
+		mBeatLengthSamples = static_cast<int>(mSampleRate / mBpm * 60.0);
 
 		int newSampleSize = (mBeatLengthSamples + 1) << 5;
 		mInternalBuffer.setSize(outputChannels, newSampleSize, false, true, false);
@@ -38,25 +47,20 @@ void SlowBeatFilter::prepareProcessBlock(int inputChannels, int outputChannels, 
 	mFade = params.fade;
 
 	auto loopLength = params.loopLength;
-	float mult = (loopLength & 0x01) ? 1.0f : 2.0f / 3.0f; // even = triplet
-	mLoopLength = (float)(2 << (loopLength >> 1)) / 8.0f * mult;
+	int split = (loopLength & 1) ? 2 : 3; // even = triplet
+	mLoopLength = loopLengthBars(static_cast<int>(loopLength >> 1), split);
 
-	int fadeSamples = (int)(mFade * mBeatLengthSamples);
-	int mBLSdiv4 = mBeatLengthSamples >> 2;
+	int fadeSamples = static_cast<int>(mFade * mBeatLengthSamples);
+	mStartLength = sampleBorderLength(static_cast<int>(params.startLength), fadeSamples, mBeatLengthSamples / 4);
+	mEndLength = sampleBorderLength(static_cast<int>(params.endLength), fadeSamples, mBeatLengthSamples / 4);
 
-	auto startLength = params.startLength;
-	mStartLength = (startLength == 0) ? 0 : (startLength == 1) ? fadeSamples : (2 << startLength) * mBLSdiv4;
-
-	auto endLength = params.endLength;
-	mEndLength = (endLength == 0) ? 0 : (endLength == 1) ? fadeSamples : (2 << endLength) * mBLSdiv4;
-
-	mSpeed = (float)(12 - params.speed) / 12.0f;
+	mSpeed = static_cast<float>(12 - params.speed) / 12.0f;
 
 	if (params.hasParams && FLAG_PPQ_POSITION) {
 		auto prevModLoop = fmod(mPpqPosition, mLoopLength);
 		auto prevModFull = fmod(mPpqPosition, 32.0f);
 
-		mPpqPosition = (float)params.ppqPosition;
+		mPpqPosition = static_cast<float>(params.ppqPosition);
 
 		if (prevModFull > fmod(mPpqPosition, 32.0f) || mHead > mInternalBuffer.getNumSamples() || !params.isPlaying || mPpqPosition <= std::numeric_limits<float>::epsilon()) {
 			mHead = 0;
