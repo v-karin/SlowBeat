@@ -94,21 +94,21 @@ void SlowBeatFilter::finishPlayback() {
 	mHead2 = 0;
 }
 
-SlowBeatReturn SlowBeatFilter::getVariables() {
-	SlowBeatReturn variables;
-
-	variables.bpm = mBpm;
-	variables.ppqPosition = mPpqPosition;
-	variables.loopLength = mLoopLength;
-	variables.startLength = mStartLength;
-	variables.endLength = mEndLength;
-	variables.speed = mSpeed;
-	variables.mix = mMix;
-	variables.internalVolume = mInternalVolume;
-	variables.fade = mFade;
-	variables.phase = mPhase;
-	variables.head = mHead;
-	variables.head2 = mHead2;
+const SlowBeatReturn &SlowBeatFilter::getVariables() {
+	const SlowBeatReturn variables{
+		.bpm            = mBpm,
+		.ppqPosition    = mPpqPosition,
+		.loopLength     = mLoopLength,
+		.startLength    = mStartLength,
+		.endLength      = mEndLength,
+		.speed          = mSpeed,
+		.mix            = mMix,
+		.internalVolume = mInternalVolume,
+		.fade           = mFade,
+		.phase          = mPhase,
+		.head           = mHead,
+		.head2          = mHead2
+	};
 
 	return variables;
 }
