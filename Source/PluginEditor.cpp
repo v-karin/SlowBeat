@@ -127,7 +127,7 @@ void SlowBeatAudioProcessorEditor::resized() {
 }
 
 void SlowBeatAudioProcessorEditor::timerCallback() {
-    SlowBeatReturn variables = audioProcessor.getVariables();
+    const SlowBeatReturn &variables = audioProcessor.getVariables();
 
     bpmLabel.setText("BPM: " + std::to_string(variables.bpm), juce::NotificationType::dontSendNotification);
     ppqPositionLabel.setText("PPQ Pos: " + std::to_string(variables.ppqPosition), juce::NotificationType::dontSendNotification);

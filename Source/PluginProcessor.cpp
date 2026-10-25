@@ -204,7 +204,7 @@ void SlowBeatAudioProcessor::setStateInformation(const void *data, int sizeInByt
     // whose contents will have been created by the getStateInformation() call.
 }
 
-SlowBeatReturn SlowBeatAudioProcessor::getVariables() {
+const SlowBeatReturn &SlowBeatAudioProcessor::getVariables() {
     return filter.getVariables();
 }
 
