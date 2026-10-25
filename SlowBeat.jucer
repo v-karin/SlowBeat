@@ -1,48 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="GnySB0" name="SlowBeat" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginFormats="buildLV2,buildVST,buildVST3" pluginVST3Category="Fx"
-              version="0.0.1" pluginVSTCategory="kPlugCategEffect" lv2Uri="SlowBeat-0.0.1">
-  <MAINGROUP id="LPwxrc" name="SlowBeat">
-    <GROUP id="{EAA608F5-1651-4AF5-79C0-8A2D97820E2F}" name="Source">
-      <FILE id="UnWlwi" name="PluginProcessor.cpp" compile="1" resource="0"
+<JUCERPROJECT id="Tn2sAW" name="SlowBeat" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="0.0.2"
+              pluginFormats="buildLV2,buildVST,buildVST3" pluginDesc="Slow-speed chop effect"
+              pluginManufacturer="Vkarin" pluginManufacturerCode="Vkri" pluginCode="Slwb"
+              pluginVST3Category="Fx" pluginVSTCategory="kPlugCategEffect"
+              pluginLV2PluginClass="SpectralPlugin" lv2Uri="urn:SlowBeat.0.0.2"
+              cppLanguageStandard="20">
+  <MAINGROUP id="BWYVod" name="SlowBeat">
+    <GROUP id="{03D3FF5C-21B9-3FEE-6E49-5B4C4E3BF2D5}" name="Source">
+      <FILE id="g8hNOo" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
-      <FILE id="wTWDb1" name="PluginProcessor.h" compile="0" resource="0"
+      <FILE id="UbumPi" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
-      <FILE id="Y17r99" name="PluginEditor.cpp" compile="1" resource="0"
+      <FILE id="UhS4RN" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
-      <FILE id="YXzHGd" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
-      <FILE id="XLNeR3" name="SlowBeatFilter.cpp" compile="1" resource="0"
+      <FILE id="rjLQ9T" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="nm8qVV" name="SlowBeatFilter.cpp" compile="1" resource="0"
             file="Source/SlowBeatFilter.cpp"/>
-      <FILE id="SHQR8N" name="SlowBeatFilter.h" compile="0" resource="0"
+      <FILE id="cdLYKo" name="SlowBeatFilter.h" compile="0" resource="0"
             file="Source/SlowBeatFilter.h"/>
     </GROUP>
   </MAINGROUP>
-  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
-  <EXPORTFORMATS>
-    <VS2022 targetFolder="Builds/VisualStudio2022">
-      <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="SlowBeat"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="SlowBeat"/>
-      </CONFIGURATIONS>
-      <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors_headless" path="../../../JUCE/modules"/>
-      </MODULEPATHS>
-    </VS2022>
-  </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
@@ -60,4 +39,28 @@
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
   </MODULES>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <VS2022 targetFolder="Builds/VisualStudio2022">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="SlowBeat"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="SlowBeat"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2022>
+  </EXPORTFORMATS>
 </JUCERPROJECT>

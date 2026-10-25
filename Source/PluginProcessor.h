@@ -15,11 +15,7 @@
 //==============================================================================
 /**
 */
-class SlowBeatAudioProcessor: public juce::AudioProcessor
-#if JucePlugin_Enable_ARA
-    , public juce::AudioProcessorARAExtension
-#endif
-{
+class SlowBeatAudioProcessor: public juce::AudioProcessor {
 public:
     //==============================================================================
     SlowBeatAudioProcessor();
