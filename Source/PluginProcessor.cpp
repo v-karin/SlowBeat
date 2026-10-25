@@ -13,17 +13,13 @@
 SlowBeatAudioProcessor::SlowBeatAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
     : AudioProcessor(BusesProperties()
-#if ! JucePlugin_IsMidiEffect
-#if ! JucePlugin_IsSynth
                      .withInput("Input", juce::AudioChannelSet::stereo(), true)
-#endif
                      .withOutput("Output", juce::AudioChannelSet::stereo(), true)
-#endif
     ),
 #else
     :
 #endif
-apvts(*this, nullptr, juce::Identifier("SlowBeatPlugin"), {
+    apvts(*this, nullptr, juce::Identifier("SlowBeatPlugin"), {
     std::make_unique<juce::AudioParameterInt>("loop_length", "Loop Length", 0, 15, 7),
     std::make_unique<juce::AudioParameterInt>("start_length", "Start Length", 0, 7, 1),
     std::make_unique<juce::AudioParameterInt>("end_length", "End Length", 0, 7, 1),
@@ -34,7 +30,7 @@ apvts(*this, nullptr, juce::Identifier("SlowBeatPlugin"), {
     std::make_unique<juce::AudioParameterFloat>("mix", "Mix", juce::NormalisableRange<float>(0.0f, 1.0f, 0.0f), 1.0f),
 
     std::make_unique<juce::AudioParameterBool>("on", "On", true)
-      }) {
+    }) {
 }
 
 SlowBeatAudioProcessor::~SlowBeatAudioProcessor() {
@@ -46,27 +42,15 @@ const juce::String SlowBeatAudioProcessor::getName() const {
 }
 
 bool SlowBeatAudioProcessor::acceptsMidi() const {
-#if JucePlugin_WantsMidiInput
-    return true;
-#else
     return false;
-#endif
 }
 
 bool SlowBeatAudioProcessor::producesMidi() const {
-#if JucePlugin_ProducesMidiOutput
-    return true;
-#else
     return false;
-#endif
 }
 
 bool SlowBeatAudioProcessor::isMidiEffect() const {
-#if JucePlugin_IsMidiEffect
-    return true;
-#else
     return false;
-#endif
 }
 
 double SlowBeatAudioProcessor::getTailLengthSeconds() const {
@@ -103,10 +87,6 @@ void SlowBeatAudioProcessor::releaseResources() {
 
 #ifndef JucePlugin_PreferredChannelConfigurations
 bool SlowBeatAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) const {
-#if JucePlugin_IsMidiEffect
-    juce::ignoreUnused(layouts);
-    return true;
-#else
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
     // Some plugin hosts, such as certain GarageBand versions, will only
@@ -116,13 +96,10 @@ bool SlowBeatAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) 
         return false;
 
     // This checks if the input layout matches the output layout
-#if ! JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
-#endif
 
     return true;
-#endif
 }
 #endif
 
