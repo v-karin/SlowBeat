@@ -101,7 +101,7 @@ public:
 
 	void finishPlayback();
 
-	const SlowBeatReturn &getVariables();
+	const SlowBeatReturn getVariables();
 
 private:
 	//std::vector<std::vector<float>> mInternalBuffer;

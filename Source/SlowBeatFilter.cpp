@@ -185,7 +185,7 @@ void SlowBeatFilter::finishPlayback() {
 	mOutputHead = 0;
 }
 
-const SlowBeatReturn &SlowBeatFilter::getVariables() {
+const SlowBeatReturn SlowBeatFilter::getVariables() {
 	const SlowBeatReturn variables{
 		.bpm            = mBpm,
 		.ppqPosition    = mPpqPosition,
