@@ -14,6 +14,40 @@ static int sampleBorderLength(int exponent, int fadeSamples, int lengthMult) {
 
 
 
+SampleBlockHead::SampleBlockHead(int headPosition, int lengthSamples, int fadeSamples, float speed, int interpolatorIdx) {
+	mInputHead = headPosition;
+	mRemainingLength = lengthSamples + fadeSamples;
+	mFadeLength = fadeSamples;
+	mSpeed = speed;
+	mInterpolatorIdx = interpolatorIdx;
+}
+
+void SampleBlockHead::checkBuffer(int numSamples) {
+	if (mBuffer.getNumSamples() != numSamples) {
+		mBuffer.setSize(1, numSamples, false, false, true);
+	}
+}
+
+void SampleBlockHead::writeSamples(InterpolatorPool &pool, juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples) {
+	checkBuffer(numSamples);
+	int processedSamples = 0;
+	
+	for (int channel = 0; channel < input.getNumChannels(); channel++) {
+		processedSamples = pool.processChannel(mInterpolatorIdx, channel, mSpeed, input.getReadPointer(channel, mInputHead), mBuffer.getWritePointer(0), numSamples);
+		output.addFromWithRamp(channel, 0, mBuffer.getReadPointer(0), numSamples, 1, 1);
+	}
+
+	mInputHead += processedSamples;
+	mRemainingLength -= processedSamples;
+}
+
+void SampleBlockHead::forceFade() {
+	mRemainingLength = mFadeLength;
+}
+
+
+
+
 InterpolatorPool::InterpolatorPool() {
 }
 

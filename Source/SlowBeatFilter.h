@@ -68,6 +68,26 @@ private:
 
 
 
+class SampleBlockHead {
+public:
+	SampleBlockHead(int headPosition, int lengthSamples, int fadeSamples, float speed, int interpolatorIdx);
+	void checkBuffer(int numSamples);
+	void writeSamples(InterpolatorPool &pool, juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples);
+	void forceFade();
+
+private:
+	juce::AudioBuffer<float> mBuffer;
+	int mInputHead;
+	int mRemainingLength;
+	int mFadeLength;
+	float mSpeed;
+	int mInterpolatorIdx;
+	float mWeight = 0;
+};
+
+
+
+
 class SlowBeatFilter {
 public:
 	SlowBeatFilter();
