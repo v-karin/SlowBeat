@@ -97,6 +97,7 @@ public:
 	void prepareProcessBlock(int numChannels, int numSamples, SlowBeatParams &params);
 	void processChannel(int channel, float *channelData);
 	void finishProcessBlock();
+	void processBlock(juce::AudioBuffer<float> &buffer, SlowBeatParams &params);
 
 	void finishPlayback();
 

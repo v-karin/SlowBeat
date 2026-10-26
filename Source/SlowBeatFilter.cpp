@@ -163,6 +163,21 @@ void SlowBeatFilter::finishProcessBlock() {
 	mOutputHead += mProcessed;
 }
 
+void SlowBeatFilter::processBlock(juce::AudioBuffer<float> &buffer, SlowBeatParams &params) {
+	int numChannels = buffer.getNumChannels();
+	prepareProcessBlock(numChannels, buffer.getNumSamples(), params);
+
+	for (int channel = 0; channel < numChannels; channel++) {
+		auto *data = buffer.getWritePointer(channel);
+		processChannel(channel, data);
+	}
+
+	finishProcessBlock();
+}
+
+
+
+
 void SlowBeatFilter::finishPlayback() {
 	mInternalBuffer.setSize(0, 0);
 

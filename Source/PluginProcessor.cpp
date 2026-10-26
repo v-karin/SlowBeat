@@ -105,9 +105,6 @@ bool SlowBeatAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) 
 
 void SlowBeatAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages) {
     juce::ScopedNoDenormals noDenormals;
-    int numChannels = buffer.getNumChannels();
-    int numSamples = buffer.getNumSamples();
-
     SlowBeatParams params;
 
     params.sampleRate = getSampleRate();
@@ -144,15 +141,7 @@ void SlowBeatAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce
 
     params.on = (*apvts.getRawParameterValue("on") > 0.5) ? true : false;
 
-    filter.prepareProcessBlock(numChannels, numSamples, params);
-
-    for (int channel = 0; channel < numChannels; ++channel) {
-        auto *channelData = buffer.getWritePointer(channel);
-
-        filter.processChannel(channel, channelData);
-    }
-
-    filter.finishProcessBlock();
+    filter.processBlock(buffer, params);
 }
 
 //==============================================================================
