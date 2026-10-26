@@ -133,11 +133,11 @@ void SlowBeatAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce
         }
     }
     
-    params.loopLength = (char)*apvts.getRawParameterValue("loop_length");
-    params.startLength = (char)*apvts.getRawParameterValue("start_length");
-    params.endLength = (char)*apvts.getRawParameterValue("end_length");
+    params.loopLength = static_cast<char>(*apvts.getRawParameterValue("loop_length"));
+    params.startLength = static_cast<char>(*apvts.getRawParameterValue("start_length"));
+    params.endLength = static_cast<char>(*apvts.getRawParameterValue("end_length"));
 
-    params.speed = (char)*apvts.getRawParameterValue("speed");
+    params.speed = static_cast<char>(*apvts.getRawParameterValue("speed"));
     params.fade = *apvts.getRawParameterValue("fade");
     params.phase = *apvts.getRawParameterValue("phase");
     params.mix = *apvts.getRawParameterValue("mix");
