@@ -72,36 +72,31 @@ private:
 	juce::AudioSampleBuffer mInternalBuffer;
 	std::vector<juce::Interpolators::CatmullRom> mInterpolators;
 
-	int mOutputChannels = 0;
-
-	bool preparingToPlay = false;
-
-	int mNumSamples = 0;
-
 	double mSampleRate = 0.0;
-
 	double mBpm = 0.0;
 	double mBpmInv = 0.0;
+
 	float mPpqPosition = 0.0;
-
 	float mLoopLength = 0;
-	int mStartLength = 0;
-	int mEndLength = 0;
 
-	float mSpeed = 1.0;
-
-	float mMix = 1.0;
 	float mInternalVolume = 0.0;
 	float mInternalVolumeIncrement = 0.0;
 
+	float mSpeed = 1.0;
+	float mMix = 1.0;
 	float mFade = 0.0;
 	float mPhase = 0.0;
 
-	bool mOn = false;
+	int mOutputChannels = 0;
+	int mNumSamples = 0;
+	int mStartLength = 0;
+	int mEndLength = 0;
 
 	int mInputHead = 0;
 	int mOutputHead = 0;
-
 	int mBeatLengthSamples = 0;
 	int mProcessed = 0;
+
+	bool mOn = false;
+	bool preparingToPlay = false;
 };
