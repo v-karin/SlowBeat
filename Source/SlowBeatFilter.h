@@ -3,6 +3,9 @@
 #include <vector>
 #include "JuceHeader.h"
 
+
+
+
 struct SlowBeatParams {
 	double sampleRate;
 
@@ -53,6 +56,9 @@ public:
 private:
 };
 
+
+
+
 class SlowBeatFilter {
 public:
 	SlowBeatFilter();
@@ -69,7 +75,7 @@ public:
 
 private:
 	//std::vector<std::vector<float>> mInternalBuffer;
-	juce::AudioSampleBuffer mInternalBuffer;
+	juce::AudioBuffer<float> mInternalBuffer;
 	std::vector<juce::Interpolators::CatmullRom> mInterpolators;
 
 	double mSampleRate = 0.0;
