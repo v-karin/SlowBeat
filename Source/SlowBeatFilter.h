@@ -49,11 +49,20 @@ struct SlowBeatReturn {
 
 
 
-class SlowBeatSampleBlock {
+
+class InterpolatorPool {
 public:
-	SlowBeatSampleBlock();
+	InterpolatorPool();
+	void setChannels(int channels);
+	int getFreeInterpolatorIdx();
+	void releaseInterpolatorIdx(int idx);
+	int processChannel(int idx, int channel, double speed, const float *input, float *output, int amount);
 
 private:
+	std::vector<std::vector<juce::Interpolators::CatmullRom>> mInterpolators;
+	std::vector<bool> mOccupied;
+	std::vector<bool> mReady;
+	int mChannels = 2;
 };
 
 

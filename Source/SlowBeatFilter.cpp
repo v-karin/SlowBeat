@@ -11,6 +11,48 @@ static int sampleBorderLength(int exponent, int fadeSamples, int lengthMult) {
 	return exponent == 0 ? 0 : (exponent == 1 ? fadeSamples : (2 << exponent) * lengthMult);
 }
 
+
+
+
+InterpolatorPool::InterpolatorPool() {
+}
+
+void InterpolatorPool::setChannels(int channels) {
+	mChannels = channels;
+	for (auto &group : mInterpolators) {
+		group.resize(channels);
+	}
+}
+
+int InterpolatorPool::getFreeInterpolatorIdx() {
+	for (int i = 0; i < mInterpolators.size(); i++) {
+		if (!mOccupied[i]) {
+			mOccupied[i] = true;
+			return i;
+		}
+	}
+
+	mInterpolators.push_back(std::vector<juce::Interpolators::CatmullRom>(mChannels));
+	mOccupied.push_back(true);
+	return mInterpolators.size() - 1;
+}
+
+void InterpolatorPool::releaseInterpolatorIdx(int idx) {
+	auto &group = mInterpolators[idx];
+	for (auto &interpolator : group) {
+		interpolator.reset();
+	}
+
+	mOccupied[idx] = false;
+}
+
+int InterpolatorPool::processChannel(int idx, int channel, double speed, const float *input, float *output, int amount) {
+	return mInterpolators[idx][channel].process(speed, input, output, amount);
+}
+
+
+
+
 SlowBeatFilter::SlowBeatFilter() {
 }
 
