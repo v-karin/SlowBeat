@@ -94,7 +94,7 @@ public:
 	
 	void prepareToPlay();
 
-	void prepareProcessBlock(int inputChannels, int outputChannels, int numSamples, SlowBeatParams &params);
+	void prepareProcessBlock(int numChannels, int numSamples, SlowBeatParams &params);
 	void processChannel(int channel, float *channelData);
 	void finishProcessBlock();
 
@@ -122,7 +122,7 @@ private:
 	float mFade = 0.0;
 	float mPhase = 0.0;
 
-	int mOutputChannels = 0;
+	int mChannels = 0;
 	int mNumSamples = 0;
 	int mStartLength = 0;
 	int mEndLength = 0;

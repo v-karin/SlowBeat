@@ -93,7 +93,7 @@ SlowBeatFilter::SlowBeatFilter() {
 void SlowBeatFilter::prepareToPlay() {
 }
 
-void SlowBeatFilter::prepareProcessBlock(int inputChannels, int outputChannels, int numSamples, SlowBeatParams &params) {
+void SlowBeatFilter::prepareProcessBlock(int numChannels, int numSamples, SlowBeatParams &params) {
 	auto oldSampleRate = mSampleRate;
 	auto oldBpm = mBpm;
 
@@ -102,14 +102,14 @@ void SlowBeatFilter::prepareProcessBlock(int inputChannels, int outputChannels, 
 		mBpm = params.bpm;
 	}
 
-	if (oldSampleRate != mSampleRate || oldBpm != mBpm || mOutputChannels != outputChannels) {
-		mOutputChannels = outputChannels;
+	if (oldSampleRate != mSampleRate || oldBpm != mBpm || mChannels != numChannels) {
+		mChannels = numChannels;
 		mBeatLengthSamples = static_cast<int>(mSampleRate / mBpm * 60.0);
 
 		int newSampleSize = (mBeatLengthSamples + 1) * 32;
-		mInternalBuffer.setSize(mOutputChannels, newSampleSize, false, true, false);
+		mInternalBuffer.setSize(mChannels, newSampleSize, false, true, false);
 
-		mInterpolators.resize(mOutputChannels);
+		mInterpolators.resize(mChannels);
 		for (auto &interpolator : mInterpolators) {
 			interpolator.reset();
 		}
