@@ -53,12 +53,17 @@ int InterpolatorPool::processChannel(int idx, int channel, double speed, const f
 
 
 
-SampleBlockHead::SampleBlockHead(int headPosition, int lengthSamples, int fadeSamples, float speed, int interpolatorIdx) {
+SampleBlockHead::SampleBlockHead(int headPosition, int lengthSamples, int fadeSamples, float speed, InterpolatorPool &pool)
+	: mAssignedPool(pool) {
 	mInputHead = headPosition;
 	mRemainingLength = lengthSamples + fadeSamples;
 	mFadeLength = fadeSamples;
 	mSpeed = speed;
-	mInterpolatorIdx = interpolatorIdx;
+	mIdx = pool.getFreeInterpolatorIdx();
+}
+
+SampleBlockHead::~SampleBlockHead() {
+	mAssignedPool.releaseInterpolatorIdx(mIdx);
 }
 
 void SampleBlockHead::checkBuffer(int numSamples) {
@@ -67,12 +72,17 @@ void SampleBlockHead::checkBuffer(int numSamples) {
 	}
 }
 
-void SampleBlockHead::writeSamples(InterpolatorPool &pool, juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples) {
+void SampleBlockHead::writeSamples(juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples) {
 	checkBuffer(numSamples);
 	int processedSamples = 0;
 
 	for (int channel = 0; channel < input.getNumChannels(); channel++) {
-		processedSamples = pool.processChannel(mInterpolatorIdx, channel, mSpeed, input.getReadPointer(channel, mInputHead), mBuffer.getWritePointer(0), numSamples);
+		processedSamples = mAssignedPool.processChannel(
+			mIdx, channel, mSpeed,
+			input.getReadPointer(channel, mInputHead),
+			mBuffer.getWritePointer(0),
+			numSamples
+		);
 		output.addFromWithRamp(channel, 0, mBuffer.getReadPointer(0), numSamples, 1, 1);
 	}
 

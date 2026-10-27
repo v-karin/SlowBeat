@@ -70,18 +70,20 @@ private:
 
 class SampleBlockHead {
 public:
-	SampleBlockHead(int headPosition, int lengthSamples, int fadeSamples, float speed, int interpolatorIdx);
+	SampleBlockHead(int headPosition, int lengthSamples, int fadeSamples, float speed, InterpolatorPool &pool);
+	~SampleBlockHead();
 	void checkBuffer(int numSamples);
-	void writeSamples(InterpolatorPool &pool, juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples);
+	void writeSamples(juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples);
 	void forceFade();
 
 private:
 	juce::AudioBuffer<float> mBuffer;
+	InterpolatorPool &mAssignedPool;
 	int mInputHead;
 	int mRemainingLength;
 	int mFadeLength;
 	float mSpeed;
-	int mInterpolatorIdx;
+	int mIdx;
 	float mWeight = 0;
 };
 
