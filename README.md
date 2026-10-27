@@ -14,7 +14,7 @@ Download the FST repository.
 
 Make a folder directory, `fst\pluginterfaces\vst2.x`.
 
-Copy all header files from the `fst` folder in the FST repository, and paste them in the `vst2.x` folder.
+Copy all of the header files from the `fst` folder in the FST repository, and paste them in the `vst2.x` folder.
 
 Open the `.jucer` file with Projucer, then click on `File -> Global Paths`.
 
@@ -22,7 +22,9 @@ Set the **VST (Legacy) SDK** directory to the `fst` folder that contains the `pl
 
 ### Legality
 
-The legality of using FST to release plugin builds is discussed in the linked repository's README.
+TL;DR: if you plan to distribute builds as "VST" or "VST-compatible" (referring to VST2), you will need to have a VST2 licence. For all intents and purposes, this repository will have **FST** plugin builds.
+
+The legality of using FST to release plugin builds is discussed in the FST repository's README.
 
 Details about compiling and distributing plugins that interact with VST hosts (e.g. LMMS VeSTige) were discussed in various JUCE forum threads below.
 
