@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="Tn2sAW" name="SlowBeat" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="0.0.2"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="0.0.3"
               pluginFormats="buildLV2,buildVST,buildVST3" pluginDesc="Slow-speed chop effect"
               pluginManufacturer="Vkarin" pluginManufacturerCode="Vkri" pluginCode="Slwb"
               pluginVST3Category="Fx" pluginVSTCategory="kPlugCategEffect"
-              pluginLV2PluginClass="SpectralPlugin" lv2Uri="urn:SlowBeat.0.0.2"
+              pluginLV2PluginClass="SpectralPlugin" lv2Uri="urn:SlowBeat.0.0.3"
               cppLanguageStandard="20">
   <MAINGROUP id="BWYVod" name="SlowBeat">
     <GROUP id="{03D3FF5C-21B9-3FEE-6E49-5B4C4E3BF2D5}" name="Source">
