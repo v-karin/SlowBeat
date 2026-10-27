@@ -148,7 +148,7 @@ void SlowBeatFilter::prepareProcessBlock(int numChannels, int numSamples, SlowBe
 
 		mPpqPosition = static_cast<float>(params.ppqPosition);
 
-		if (prevModFull > fmod(mPpqPosition, 32.0f) || mInputHead > mInternalBuffer.getNumSamples() || !params.isPlaying || mPpqPosition <= std::numeric_limits<float>::epsilon()) {
+		if (prevModFull > fmod(mPpqPosition, 32.0f) || mInputHead > mInternalBuffer.getNumSamples()) {
 			mInputHead = 0;
 		}
 
@@ -159,13 +159,11 @@ void SlowBeatFilter::prepareProcessBlock(int numChannels, int numSamples, SlowBe
 }
 
 void SlowBeatFilter::processChannel(int channel, float *channelData) {
-	if (mOn) {
-		float *internalChannelData = mInternalBuffer.getWritePointer(channel, mInputHead);
-		for (int i = 0; i < mNumSamples; ++i) {
-			internalChannelData[i] = channelData[i];
-		}
-		mProcessed = mInterpolators[channel].process(mSpeed, mInternalBuffer.getWritePointer(channel, mOutputHead), channelData, mNumSamples);
+	float *internalChannelData = mInternalBuffer.getWritePointer(channel, mInputHead);
+	for (int i = 0; i < mNumSamples; ++i) {
+		internalChannelData[i] = channelData[i];
 	}
+	mProcessed = mInterpolators[channel].process(mSpeed, mInternalBuffer.getWritePointer(channel, mOutputHead), channelData, mNumSamples);
 }
 
 void SlowBeatFilter::finishProcessBlock() {
@@ -177,9 +175,11 @@ void SlowBeatFilter::processBlock(juce::AudioBuffer<float> &buffer, SlowBeatPara
 	int numChannels = buffer.getNumChannels();
 	prepareProcessBlock(numChannels, buffer.getNumSamples(), params);
 
-	for (int channel = 0; channel < numChannels; channel++) {
-		auto *data = buffer.getWritePointer(channel);
-		processChannel(channel, data);
+	if (params.isPlaying && params.on) {
+		for (int channel = 0; channel < numChannels; channel++) {
+			auto *data = buffer.getWritePointer(channel);
+			processChannel(channel, data);
+		}
 	}
 
 	finishProcessBlock();
