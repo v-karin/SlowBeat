@@ -54,11 +54,8 @@ int InterpolatorPool::processChannel(int idx, int channel, double speed, const f
 
 
 SampleBlockHead::SampleBlockHead(int headPosition, int lengthSamples, int fadeSamples, float speed, InterpolatorPool &pool)
-	: mAssignedPool(pool) {
-	mInputHead = headPosition;
+	: mAssignedPool(pool), mInputHead(headPosition), mFadeLength(fadeSamples), mSpeed(speed) {
 	mRemainingLength = lengthSamples + fadeSamples;
-	mFadeLength = fadeSamples;
-	mSpeed = speed;
 	mIdx = pool.getFreeInterpolatorIdx();
 }
 
