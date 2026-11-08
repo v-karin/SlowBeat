@@ -73,7 +73,7 @@ public:
 	SampleBlockHead(int headPosition, int lengthSamples, int fadeSamples, float speed, InterpolatorPool &pool);
 	~SampleBlockHead();
 	void checkBuffer(int numSamples);
-	void writeSamples(juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples);
+	void writeSamples(const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples);
 	void forceFade();
 
 private:
@@ -82,9 +82,10 @@ private:
 	int mInputHead;
 	int mRemainingLength;
 	int mFadeLength;
-	float mSpeed;
 	int mIdx;
-	float mWeight = 0;
+	float mSpeed;
+
+	float mWeight = 0.f;
 };
 
 

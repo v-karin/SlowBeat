@@ -69,7 +69,7 @@ void SampleBlockHead::checkBuffer(int numSamples) {
 	}
 }
 
-void SampleBlockHead::writeSamples(juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples) {
+void SampleBlockHead::writeSamples(const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples) {
 	checkBuffer(numSamples);
 	int processedSamples = 0;
 
