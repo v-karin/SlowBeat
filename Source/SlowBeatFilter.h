@@ -98,16 +98,18 @@ public:
 	void prepareToPlay();
 
 	void prepareProcessBlock(int numChannels, int numSamples, SlowBeatParams &params);
-	void processChannel(int channel, float *channelData);
-	void finishProcessBlock();
 	void processBlock(juce::AudioBuffer<float> &buffer, SlowBeatParams &params);
+	void finishProcessBlock();
 
 	void finishPlayback();
 
 	const SlowBeatReturn getVariables();
 
 private:
-	//std::vector<std::vector<float>> mInternalBuffer;
+	float loopLengthBars(int exponent, int split);
+	int sampleBorderLength(int exponent, int fadeSamples, int lengthMult);
+	void processChannel(int channel, float *channelData);
+
 	juce::AudioBuffer<float> mInternalBuffer;
 	std::vector<juce::Interpolators::CatmullRom> mInterpolators;
 

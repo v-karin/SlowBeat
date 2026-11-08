@@ -2,17 +2,6 @@
 
 
 
-static float loopLengthBars(int exponent, int split) {
-	auto mult = 2.0f / static_cast<float>(split);
-	return static_cast<float>(2 << exponent) / 8.0f * mult;
-}
-
-static int sampleBorderLength(int exponent, int fadeSamples, int lengthMult) {
-	return exponent == 0 ? 0 : (exponent == 1 ? fadeSamples : (2 << exponent) * lengthMult);
-}
-
-
-
 
 InterpolatorPool::InterpolatorPool() {
 }
@@ -97,8 +86,20 @@ void SampleBlockHead::forceFade() {
 SlowBeatFilter::SlowBeatFilter() {
 }
 
+float SlowBeatFilter::loopLengthBars(int exponent, int split) {
+	auto mult = 2.0f / static_cast<float>(split);
+	return static_cast<float>(2 << exponent) / 8.0f * mult;
+}
+
+int SlowBeatFilter::sampleBorderLength(int exponent, int fadeSamples, int lengthMult) {
+	return exponent == 0 ? 0 : (exponent == 1 ? fadeSamples : (2 << exponent) * lengthMult);
+}
+
 void SlowBeatFilter::prepareToPlay() {
 }
+
+
+
 
 void SlowBeatFilter::prepareProcessBlock(int numChannels, int numSamples, SlowBeatParams &params) {
 	auto oldSampleRate = mSampleRate;
@@ -155,17 +156,15 @@ void SlowBeatFilter::prepareProcessBlock(int numChannels, int numSamples, SlowBe
 	}
 }
 
+
+
+
 void SlowBeatFilter::processChannel(int channel, float *channelData) {
 	float *internalChannelData = mInternalBuffer.getWritePointer(channel, mInputHead);
 	for (int i = 0; i < mNumSamples; ++i) {
 		internalChannelData[i] = channelData[i];
 	}
 	mProcessed = mInterpolators[channel].process(mSpeed, mInternalBuffer.getWritePointer(channel, mOutputHead), channelData, mNumSamples);
-}
-
-void SlowBeatFilter::finishProcessBlock() {
-	mInputHead += mNumSamples;
-	mOutputHead += mProcessed;
 }
 
 void SlowBeatFilter::processBlock(juce::AudioBuffer<float> &buffer, SlowBeatParams &params) {
@@ -180,6 +179,11 @@ void SlowBeatFilter::processBlock(juce::AudioBuffer<float> &buffer, SlowBeatPara
 	}
 
 	finishProcessBlock();
+}
+
+void SlowBeatFilter::finishProcessBlock() {
+	mInputHead += mNumSamples;
+	mOutputHead += mProcessed;
 }
 
 
