@@ -21,13 +21,13 @@ struct SlowBeatParams {
 	char endLength;
 	char speed;
 
-	char hasParams = '\0';
+	char hasParams{ '\0' };
 	bool on;
 	bool isPlaying;
 };
 
-const char FLAG_BPM = 0x01;
-const char FLAG_PPQ_POSITION = 0x02;
+const char FLAG_BPM{ '\x01'};
+const char FLAG_PPQ_POSITION{ '\x02'};
 
 struct SlowBeatReturn {
 	double bpm;
@@ -62,7 +62,7 @@ private:
 	std::vector<std::vector<juce::Interpolators::CatmullRom>> mInterpolators;
 	std::vector<bool> mOccupied;
 	std::vector<bool> mReady;
-	int mChannels = 2;
+	int mChannels{ 2 };
 };
 
 
@@ -85,7 +85,7 @@ private:
 	int mIdx;
 	float mSpeed;
 
-	float mWeight = 0.f;
+	float mWeight{ 0.0f };
 };
 
 
@@ -113,31 +113,31 @@ private:
 	juce::AudioBuffer<float> mInternalBuffer;
 	std::vector<juce::Interpolators::CatmullRom> mInterpolators;
 
-	double mSampleRate = 0.0;
-	double mBpm = 0.0;
-	double mBpmInv = 0.0;
+	double mSampleRate{ 0.0 };
+	double mBpm{ 0.0 };
+	double mBpmInv{ 0.0 };
 
-	float mPpqPosition = 0.0;
-	float mLoopLength = 0;
+	float mPpqPosition{ 0.0f };
+	float mLoopLength{ 0.0f };
 
-	float mInternalVolume = 0.0;
-	float mInternalVolumeIncrement = 0.0;
+	float mInternalVolume{ 0.0f };
+	float mInternalVolumeIncrement{ 0.0f };
 
-	float mSpeed = 1.0;
-	float mMix = 1.0;
-	float mFade = 0.0;
-	float mPhase = 0.0;
+	float mSpeed{ 1.0f };
+	float mMix{ 1.0f };
+	float mFade{ 0.0f };
+	float mPhase{ 0.0f };
 
-	int mChannels = 0;
-	int mNumSamples = 0;
-	int mStartLength = 0;
-	int mEndLength = 0;
+	int mChannels{ 0 };
+	int mNumSamples{ 0 };
+	int mStartLength{ 0 };
+	int mEndLength{ 0 };
 
-	int mInputHead = 0;
-	int mOutputHead = 0;
-	int mBeatLengthSamples = 0;
-	int mProcessed = 0;
+	int mInputHead{ 0 };
+	int mOutputHead{ 0 };
+	int mBeatLengthSamples{ 0 };
+	int mProcessed{ 0 };
 
-	bool mOn = false;
-	bool preparingToPlay = false;
+	bool mOn{ false };
+	bool preparingToPlay{ false };
 };
