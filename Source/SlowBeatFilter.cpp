@@ -58,10 +58,8 @@ void SampleBlockHead::checkBuffer(int numSamples) {
 	}
 }
 
-void SampleBlockHead::writeSamples(const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples) {
-	checkBuffer(numSamples);
+int SampleBlockHead::writeChannels(const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples, float startGain, float endGain) {
 	int processedSamples = 0;
-
 	for (int channel = 0; channel < input.getNumChannels(); channel++) {
 		processedSamples = mAssignedPool.processChannel(
 			mIdx, channel, mSpeed,
@@ -69,8 +67,38 @@ void SampleBlockHead::writeSamples(const juce::AudioBuffer<float> &input, juce::
 			mBuffer.getWritePointer(0),
 			numSamples
 		);
-		output.addFromWithRamp(channel, 0, mBuffer.getReadPointer(0), numSamples, 1, 1);
+		output.addFromWithRamp(channel, 0, mBuffer.getReadPointer(0), numSamples, startGain, endGain);
 	}
+
+	return processedSamples;
+}
+
+void SampleBlockHead::writeSamples(const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples) {
+	if (mRemainingLength <= 0) return;
+	checkBuffer(numSamples);
+
+	auto nonFadeOutLength = mRemainingLength - mFadeLength;
+	if (nonFadeOutLength > 0) {
+		auto writeSamples = numSamples > nonFadeOutLength ? nonFadeOutLength : numSamples;
+		if (mWeight < 1.0f) {
+			auto fadeLeft = static_cast<int>((1.0f - mWeight) * static_cast<float>(mFadeLength));
+		}
+	}
+	// new block above
+
+
+
+
+	// old block
+	auto writeSamples = numSamples > mRemainingLength ? mRemainingLength : numSamples;
+
+	
+	float newWeight = mWeight;
+	if (mWeight < 1.0f) { // this part is at the start (if mweight not 1)
+		newWeight = fmax(mWeight + static_cast<float>(writeSamples) / static_cast<float>(mFadeLength), 1.0f);
+	}
+
+	auto processedSamples = writeChannels(input, output, writeSamples, 1.0f, 1.0f);
 
 	mInputHead += processedSamples;
 	mRemainingLength -= processedSamples;
