@@ -58,16 +58,29 @@ void SampleBlockHead::checkBuffer(int numSamples) {
 	}
 }
 
-int SampleBlockHead::writeChannels(const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples, float startGain, float endGain) {
+int SampleBlockHead::sampleMin(int a, int b) {
+	return a > b ? b : a;
+}
+
+int SampleBlockHead::writeChannels(
+	const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output,
+	int inputHead, int outputHead, int numSamples, float startGain, float endGain
+) {
 	int processedSamples = 0;
 	for (int channel = 0; channel < input.getNumChannels(); channel++) {
+
 		processedSamples = mAssignedPool.processChannel(
 			mIdx, channel, mSpeed,
-			input.getReadPointer(channel, mInputHead),
-			mBuffer.getWritePointer(0),
+			input.getReadPointer(channel, inputHead),
+			mBuffer.getWritePointer(outputHead),
 			numSamples
 		);
-		output.addFromWithRamp(channel, 0, mBuffer.getReadPointer(0), numSamples, startGain, endGain);
+
+		output.addFromWithRamp(
+			channel, outputHead,
+			mBuffer.getReadPointer(outputHead),
+			numSamples, startGain, endGain
+		);
 	}
 
 	return processedSamples;
@@ -77,31 +90,56 @@ void SampleBlockHead::writeSamples(const juce::AudioBuffer<float> &input, juce::
 	if (mRemainingLength <= 0) return;
 	checkBuffer(numSamples);
 
+	int processedOutput = 0;
+
 	auto nonFadeOutLength = mRemainingLength - mFadeLength;
 	if (nonFadeOutLength > 0) {
-		auto writeSamples = numSamples > nonFadeOutLength ? nonFadeOutLength : numSamples;
+		auto nonFadeOutSamples = sampleMin(numSamples, nonFadeOutLength);
+		numSamples -= nonFadeOutSamples;
+
+		// fade in stage
 		if (mWeight < 1.0f) {
-			auto fadeLeft = static_cast<int>((1.0f - mWeight) * static_cast<float>(mFadeLength));
+			auto fadeInSamples = sampleMin(
+				static_cast<int>((1.0f - mWeight) * static_cast<float>(mFadeLength)),
+				nonFadeOutSamples
+			);
+			auto newWeight = fmax(
+				mWeight + static_cast<float>(fadeInSamples) / static_cast<float>(mFadeLength),
+				1.0f
+			);
+
+			mInputHead += writeChannels(input, output, mInputHead, 0, fadeInSamples, mWeight, newWeight);
+			mWeight = newWeight;
+
+			mRemainingLength -= fadeInSamples;
+			nonFadeOutSamples -= fadeInSamples;
+			processedOutput += fadeInSamples;
+		}
+
+		// full volume stage
+		if (nonFadeOutSamples > 0) {
+			mInputHead += writeChannels(input, output, mInputHead, processedOutput, nonFadeOutSamples, 1.0f, 1.0f);
+			
+			mRemainingLength -= nonFadeOutSamples;
+			processedOutput += nonFadeOutSamples;
 		}
 	}
-	// new block above
 
+	// numSamples is changed
+	// fade out stage
+	if (numSamples > 0) {
+		auto fadeOutSamples = sampleMin(
+			static_cast<int>((1.0f - mWeight) * static_cast<float>(mFadeLength)),
+			sampleMin(mRemainingLength, numSamples)
+		);
+		auto newWeight = fmin(
+			mWeight - static_cast<float>(fadeOutSamples) / static_cast<float>(mFadeLength),
+			0.0f
+		);
 
-
-
-	// old block
-	auto writeSamples = numSamples > mRemainingLength ? mRemainingLength : numSamples;
-
-	
-	float newWeight = mWeight;
-	if (mWeight < 1.0f) { // this part is at the start (if mweight not 1)
-		newWeight = fmax(mWeight + static_cast<float>(writeSamples) / static_cast<float>(mFadeLength), 1.0f);
+		mInputHead += writeChannels(input, output, mInputHead, processedOutput, fadeOutSamples, mWeight, newWeight);
+		mRemainingLength -= fadeOutSamples;
 	}
-
-	auto processedSamples = writeChannels(input, output, writeSamples, 1.0f, 1.0f);
-
-	mInputHead += processedSamples;
-	mRemainingLength -= processedSamples;
 }
 
 void SampleBlockHead::forceFade() {

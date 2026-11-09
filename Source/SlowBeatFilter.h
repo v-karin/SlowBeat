@@ -53,10 +53,10 @@ struct SlowBeatReturn {
 class InterpolatorPool {
 public:
 	InterpolatorPool();
-	void setChannels(int channels);
+	void setChannels(int);
 	int getFreeInterpolatorIdx();
-	void releaseInterpolatorIdx(int idx);
-	int processChannel(int idx, int channel, double speed, const float *input, float *output, int amount);
+	void releaseInterpolatorIdx(int);
+	int processChannel(int, int, double, const float *, float *, int);
 
 private:
 	std::vector<std::vector<juce::Interpolators::CatmullRom>> mInterpolators;
@@ -70,14 +70,15 @@ private:
 
 class SampleBlockHead {
 public:
-	SampleBlockHead(int headPosition, int lengthSamples, int fadeSamples, float speed, InterpolatorPool &pool);
+	SampleBlockHead(int, int, int, float, InterpolatorPool &);
 	~SampleBlockHead();
-	void writeSamples(const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples);
+	void writeSamples(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int);
 	void forceFade();
 
 private:
-	void checkBuffer(int numSamples);
-	int writeChannels(const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples, float startGain, float endGain);
+	void checkBuffer(int);
+	int sampleMin(int, int);
+	int writeChannels(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int, int, int, float, float);
 	juce::AudioBuffer<float> mBuffer;
 	InterpolatorPool &mAssignedPool;
 	int mInputHead;
@@ -98,8 +99,8 @@ public:
 	
 	void prepareToPlay();
 
-	void prepareProcessBlock(int numChannels, int numSamples, SlowBeatParams &params);
-	void processBlock(juce::AudioBuffer<float> &buffer, SlowBeatParams &params);
+	void prepareProcessBlock(int, int, SlowBeatParams &);
+	void processBlock(juce::AudioBuffer<float> &, SlowBeatParams &);
 	void finishProcessBlock();
 
 	void finishPlayback();
@@ -107,9 +108,9 @@ public:
 	const SlowBeatReturn getVariables();
 
 private:
-	float loopLengthBars(int exponent, int split);
-	int sampleBorderLength(int exponent, int fadeSamples, int lengthMult);
-	void processChannel(int channel, float *channelData);
+	float loopLengthBars(int, int);
+	int sampleBorderLength(int, int, int);
+	void processChannel(int, float *);
 
 	juce::AudioBuffer<float> mInternalBuffer;
 	std::vector<juce::Interpolators::CatmullRom> mInterpolators;
