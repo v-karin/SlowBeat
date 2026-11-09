@@ -3,6 +3,10 @@
 
 
 
+
+
+
+
 InterpolatorPool::InterpolatorPool() {
 }
 
@@ -42,6 +46,10 @@ int InterpolatorPool::processChannel(int idx, int channel, double speed, const f
 
 
 
+
+
+
+
 SampleBlockHead::SampleBlockHead(int headPosition, int lengthSamples, int fadeSamples, float speed, InterpolatorPool &pool)
 	: mAssignedPool(pool), mInputHead(headPosition), mFadeLength(fadeSamples), mSpeed(speed) {
 	mRemainingLength = lengthSamples + fadeSamples;
@@ -51,6 +59,9 @@ SampleBlockHead::SampleBlockHead(int headPosition, int lengthSamples, int fadeSa
 SampleBlockHead::~SampleBlockHead() {
 	mAssignedPool.releaseInterpolatorIdx(mIdx);
 }
+
+
+
 
 void SampleBlockHead::checkBuffer(int numSamples) {
 	if (mBuffer.getNumSamples() != numSamples) {
@@ -62,7 +73,7 @@ int SampleBlockHead::sampleMin(int a, int b) {
 	return a > b ? b : a;
 }
 
-int SampleBlockHead::writeChannels(
+int SampleBlockHead::writeSamplesRaw(
 	const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output,
 	int inputHead, int outputHead, int numSamples, float startGain, float endGain
 ) {
@@ -86,7 +97,10 @@ int SampleBlockHead::writeChannels(
 	return processedSamples;
 }
 
-void SampleBlockHead::writeSamples(const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples) {
+
+
+
+void SampleBlockHead::processBlock(const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output, int numSamples) {
 	if (mRemainingLength <= 0) return;
 	checkBuffer(numSamples);
 
@@ -108,7 +122,7 @@ void SampleBlockHead::writeSamples(const juce::AudioBuffer<float> &input, juce::
 				1.0f
 			);
 
-			mInputHead += writeChannels(input, output, mInputHead, 0, fadeInSamples, mWeight, newWeight);
+			mInputHead += writeSamplesRaw(input, output, mInputHead, 0, fadeInSamples, mWeight, newWeight);
 			mWeight = newWeight;
 
 			mRemainingLength -= fadeInSamples;
@@ -118,7 +132,7 @@ void SampleBlockHead::writeSamples(const juce::AudioBuffer<float> &input, juce::
 
 		// full volume stage
 		if (nonFadeOutSamples > 0) {
-			mInputHead += writeChannels(input, output, mInputHead, processedOutput, nonFadeOutSamples, 1.0f, 1.0f);
+			mInputHead += writeSamplesRaw(input, output, mInputHead, processedOutput, nonFadeOutSamples, 1.0f, 1.0f);
 			
 			mRemainingLength -= nonFadeOutSamples;
 			processedOutput += nonFadeOutSamples;
@@ -137,7 +151,7 @@ void SampleBlockHead::writeSamples(const juce::AudioBuffer<float> &input, juce::
 			0.0f
 		);
 
-		mInputHead += writeChannels(input, output, mInputHead, processedOutput, fadeOutSamples, mWeight, newWeight);
+		mInputHead += writeSamplesRaw(input, output, mInputHead, processedOutput, fadeOutSamples, mWeight, newWeight);
 		mRemainingLength -= fadeOutSamples;
 	}
 }
@@ -145,6 +159,10 @@ void SampleBlockHead::writeSamples(const juce::AudioBuffer<float> &input, juce::
 void SampleBlockHead::forceFade() {
 	mRemainingLength = mFadeLength;
 }
+
+
+
+
 
 
 

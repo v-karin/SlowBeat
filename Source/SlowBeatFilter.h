@@ -72,13 +72,13 @@ class SampleBlockHead {
 public:
 	SampleBlockHead(int, int, int, float, InterpolatorPool &);
 	~SampleBlockHead();
-	void writeSamples(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int);
+	void processBlock(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int);
 	void forceFade();
 
 private:
 	void checkBuffer(int);
 	int sampleMin(int, int);
-	int writeChannels(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int, int, int, float, float);
+	int writeSamplesRaw(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int, int, int, float, float);
 	juce::AudioBuffer<float> mBuffer;
 	InterpolatorPool &mAssignedPool;
 	int mInputHead;
