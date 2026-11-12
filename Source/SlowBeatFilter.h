@@ -57,6 +57,7 @@ public:
 	int getFreeInterpolatorIdx();
 	void releaseInterpolatorIdx(int);
 	int processChannel(int, int, double, const float *, float *, int);
+	int processChannel(int, int, double, const float *, float *, int, int);
 
 private:
 	std::vector<std::vector<juce::Interpolators::CatmullRom>> mInterpolators;
@@ -79,6 +80,7 @@ private:
 	void checkBuffer(int);
 	int sampleMin(int, int);
 	int writeSamplesRaw(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int, int, int, float, float);
+	int writeSamples(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int, int, int, float, float);
 	juce::AudioBuffer<float> mBuffer;
 	InterpolatorPool &mAssignedPool;
 	int mInputHead;

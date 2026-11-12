@@ -43,6 +43,10 @@ int InterpolatorPool::processChannel(int idx, int channel, double speed, const f
 	return mInterpolators[idx][channel].process(speed, input, output, amount);
 }
 
+int InterpolatorPool::processChannel(int idx, int channel, double speed, const float *input, float *output, int amount, int maxInput) {
+	return mInterpolators[idx][channel].process(speed, input, output, amount, maxInput, 0);
+}
+
 
 
 
@@ -95,6 +99,15 @@ int SampleBlockHead::writeSamplesRaw(
 	}
 
 	return processedSamples;
+}
+
+int SampleBlockHead::writeSamples(
+	const juce::AudioBuffer<float> &input, juce::AudioBuffer<float> &output,
+	int inputHead, int outputHead, int numSamples, float startGain, float endGain
+) {
+	return 0; // todo: check if mInputHead and subsequent read samples end after input buffer border
+	// if it does, stop early, and play more from the beginning of the buffer (i.e. reset mInputHead back to 0)
+	// already overloaded mAssignedPool processChannel w/ max input samples
 }
 
 
