@@ -50,6 +50,51 @@ struct SlowBeatReturn {
 
 
 
+class InterpolatorPool {
+public:
+	InterpolatorPool();
+	void setChannels(int);
+	int getFreeInterpolatorIdx();
+	void releaseInterpolatorIdx(int);
+	int processChannel(int, int, double, const float *, float *, int);
+	int processChannel(int, int, double, const float *, float *, int, int);
+
+private:
+	std::vector<std::vector<juce::Interpolators::CatmullRom>> mInterpolators;
+	std::vector<bool> mOccupied;
+	std::vector<bool> mReady;
+	int mChannels{ 2 };
+};
+
+
+
+
+class SampleBlockHead {
+public:
+	SampleBlockHead(int, int, int, float, InterpolatorPool &);
+	~SampleBlockHead();
+	void processBlock(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int);
+	void forceFade();
+
+private:
+	void checkBuffer(int);
+	int sampleMin(int, int);
+	int writeSamplesRaw(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int, int, int, float, float);
+	int writeSamples(const juce::AudioBuffer<float> &, juce::AudioBuffer<float> &, int, int, int, float, float);
+	juce::AudioBuffer<float> mBuffer;
+	InterpolatorPool &mAssignedPool;
+	int mInputHead;
+	int mRemainingLength;
+	int mFadeLength;
+	int mIdx;
+	float mSpeed;
+
+	float mWeight{ 0.0f };
+};
+
+
+
+
 class SlowBeatFilter {
 public:
 	SlowBeatFilter();
